@@ -29,7 +29,7 @@ const LoginPage = () => {
       ? "Register"
       : mode === MODE.RESET_PASSSWORD
       ? "Reset your password"
-      : "Verify your Email and";
+      : "Verify your Email";
 
   const buttonTitle =
     mode === MODE.LOGIN

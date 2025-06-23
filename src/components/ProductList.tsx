@@ -18,10 +18,8 @@ const ProductList = async ({
 }) => {
   const wixClient = await wixClientServer();
 
-  const productQuery = wixClient.products
-    .queryProducts()
+  const productQuery = wixClient.products.queryProducts()
     .startsWith("name", searchParams?.name || "")
-    .eq("collectionIds", categoryId)
     .hasSome(
       "productType",
       searchParams?.type ? [searchParams.type] : ["physical", "digital"]
@@ -34,15 +32,18 @@ const ProductList = async ({
         ? parseInt(searchParams.page) * (limit || PRODUCT_PER_PAGE)
         : 0
     );
-  // .find();
 
+  // ✅ Only filter by collection if a valid categoryId is provided
+  if (categoryId && categoryId !== "undefined") {
+    productQuery.eq("collectionIds", categoryId);
+  }
+
+  // ✅ Safe sorting
   if (searchParams?.sort) {
     const [sortType, sortBy] = searchParams.sort.split(" ");
-
-    if (sortType === "asc") {
+    if (sortType === "asc" && sortBy) {
       productQuery.ascending(sortBy);
-    }
-    if (sortType === "desc") {
+    } else if (sortType === "desc" && sortBy) {
       productQuery.descending(sortBy);
     }
   }
@@ -96,13 +97,13 @@ const ProductList = async ({
           </button>
         </Link>
       ))}
-      {searchParams?.cat || searchParams?.name ? (
+      {(searchParams?.cat || searchParams?.name) && (
         <Pagination
           currentPage={res.currentPage || 0}
           hasPrev={res.hasPrev()}
           hasNext={res.hasNext()}
         />
-      ) : null}
+      )}
     </div>
   );
 };

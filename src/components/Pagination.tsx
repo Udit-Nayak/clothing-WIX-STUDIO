@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Pagination = ({
@@ -21,7 +19,9 @@ const Pagination = ({
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNumber.toString());
     replace(`${pathname}?${params.toString()}`);
-  };  return (
+  };
+
+  return (
     <div className="mt-12 flex justify-between w-full">
       <button
         className="rounded-md bg-lama text-white p-2 text-sm w-24 cursor-pointer disabled:cursor-not-allowed disabled:bg-pink-200"
